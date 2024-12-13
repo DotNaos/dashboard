@@ -10,7 +10,8 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Inter", "sans-serif"],
+                // sans: ["var(--font-hanken_grotesk)", "Inter", "sans-serif"],
+                // mono: ["var(--font-roboto_mono)"],
             },
             colors: {
                 dust: "#313131",

@@ -49,6 +49,7 @@ type DailyForecast = {
     date: number;
     min: number;
     max: number;
+    humidity: number;
     description: string;
     wind: number;
 };
@@ -224,48 +225,62 @@ export default function WeatherWidget(): JSX.Element {
                 </div>
 
                 {/* Forecast */}
-                <div>
-                    {dailyForecast.map((day, i) => {
-                        const dateObj = new Date(day.date * 1000);
-                        const dayNumStr = dateObj.toLocaleDateString("us", {
-                            day: "numeric",
-                        });
-                        const dayStr = dateObj.toLocaleDateString("us", {
-                            weekday: "short",
-                        });
-                        const monthStr = dateObj.toLocaleDateString("us", {
-                            month: "short",
-                        });
-                        const hi = day.max + "°C";
-                        const lo = day.min + "°C";
-                        const w = day.wind + " m/s";
+                <table className="table-auto w-full text-left">
+                    <tbody>
+                        {dailyForecast.map((day, i) => {
+                            const dateObj = new Date(day.date * 1000);
+                            const dayNumStr = dateObj.toLocaleDateString("us", {
+                                day: "numeric",
+                            });
+                            const dayStr = dateObj.toLocaleDateString("us", {
+                                weekday: "short",
+                            });
+                            const monthStr = dateObj.toLocaleDateString("us", {
+                                month: "short",
+                            });
+                            const hi = day.max + "°C";
+                            const lo = day.min + "°C";
+                            const hum = day.humidity + "%";
+                            const w = day.wind + " m/s";
 
-                        return (
-                            <div
-                                key={i}
-                                className="py-default flex flex-row gap-overlay"
-                            >
-                                <div className="flex items-center gap-2 text-3xl font-semibold">
-                                    {dayNumStr}
-                                    <div className="flex flex-col items-start text-xs opacity-80 uppercase">
-                                        <span>{monthStr}</span>
-                                        <span>{dayStr}</span>
-                                    </div>
-                                </div>
-                                <div className="weather-measurement gap-2 font-semibold capitalize">
-                                    <span className="text-4xl">☁️</span>{" "}
-                                    {day.description}
-                                </div>
-                                <div className="flex flex-col items-center text-xs opacity-80 uppercase">
-                                    <span>{hi}</span>
-                                    <span>{lo}</span>
-                                </div>
-                                <div>/</div>
-                                <div>{w}</div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            return (
+                                <tr
+                                    key={i}
+                                    className="border-b border-gray-700 last:border-b-0"
+                                >
+                                    <td className="p-2 align-middle text-3xl font-semibold">
+                                        <div className="flex items-center gap-2">
+                                            {dayNumStr}
+                                            <div className="flex flex-col items-start text-xs opacity-80 uppercase">
+                                                <span>{monthStr}</span>
+                                                <span>{dayStr}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="p-2 align-middle font-semibold capitalize">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-4xl">☁️</span>
+                                            {day.description}
+                                        </div>
+                                    </td>
+                                    <td className="p-2 align-middle flex flex-col items-start   font-semibold uppercase text-center">
+                                        <span className="text-xl text-white">
+                                            {hi}
+                                        </span>
+                                        <span className="opacity-80 text-xs">
+                                            {lo}
+                                        </span>
+                                    </td>
+                                    <td className="p-2 align-middle items-start font-semibold text-center">
+                                        <span className="text-xl text-white">
+                                            {w}
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
