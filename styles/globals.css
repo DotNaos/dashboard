@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .overlay {
+        @apply !bg-overlay backdrop-blur-3xl;
+    }
+
+    .app-icon {
+        @apply !text-4xl bg-gradient-to-b from-dust to-dark rounded-default;
+    }
+    .weather-feature-icon {
+        @apply text-slate-400 mx-1 font-black;
+    }
+
+    .weather-measurement {
+        @apply flex items-center;
+    }
+}
