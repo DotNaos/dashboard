@@ -10,6 +10,8 @@ import {
     Wind,
 } from "lucide-react";
 
+import { siteConfig } from "@/config/site";
+
 interface CurrentWeather {
     name: string;
     main: {
@@ -21,6 +23,7 @@ interface CurrentWeather {
         speed: number;
     };
     weather: {
+        id: number;
         description: string;
     }[];
 }
@@ -31,6 +34,7 @@ interface ForecastItem {
         temp: number;
     };
     weather: {
+        id: number;
         description: string;
     }[];
     wind: {
@@ -52,7 +56,19 @@ type DailyForecast = {
     humidity: number;
     description: string;
     wind: number;
+    icon: string;
 };
+
+function getWeatherIcon(id: number): string {
+    for (const group of siteConfig.weatherConditions) {
+        for (const condition of group.conditions) {
+            if (condition.id === id) {
+                return condition.icon;
+            }
+        }
+    }
+    return ""; // Return a default icon if id not found
+}
 
 export default function WeatherWidget(): JSX.Element {
     const [currentWeather, setCurrentWeather] = useState<CurrentWeather | null>(
@@ -93,6 +109,7 @@ export default function WeatherWidget(): JSX.Element {
                 `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&units=metric&appid=${apiKey}`
             );
             const currentData: CurrentWeather = await currentRes.json();
+
             setCurrentWeather(currentData);
             if (currentData.name) setCityName(currentData.name);
 
@@ -100,6 +117,7 @@ export default function WeatherWidget(): JSX.Element {
                 `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.lat}&lon=${coords.lon}&units=metric&appid=${apiKey}`
             );
             const forecastData: ForecastData = await forecastRes.json();
+
             if (forecastData.city && forecastData.city.name)
                 setCityName(forecastData.city.name);
 
@@ -109,6 +127,7 @@ export default function WeatherWidget(): JSX.Element {
                     temps: number[];
                     winds: number[];
                     descriptions: string[];
+                    ids: number[];
                     date: number;
                 }
             > = {};
@@ -120,17 +139,20 @@ export default function WeatherWidget(): JSX.Element {
                     month: "2-digit",
                     day: "2-digit",
                 });
+
                 if (!dailyMap[dayStr]) {
                     dailyMap[dayStr] = {
                         temps: [],
                         winds: [],
                         descriptions: [],
+                        ids: [],
                         date: item.dt,
                     };
                 }
                 dailyMap[dayStr].temps.push(item.main.temp);
                 dailyMap[dayStr].winds.push(item.wind.speed);
                 dailyMap[dayStr].descriptions.push(item.weather[0].description);
+                dailyMap[dayStr].ids.push(item.weather[0].id);
             });
 
             const sortedDays = Object.keys(dailyMap)
@@ -146,17 +168,28 @@ export default function WeatherWidget(): JSX.Element {
                         dayData.winds.length
                 );
                 const desc = dayData.descriptions[0];
+                // const humidity = Math.round(
+                //     dayData.humidity.reduce((a, b) => a + b, 0) /
+                //         dayData.humidity.length
+                // );
+                const humidity = 0;
+                const iconId = dayData.ids[0]; // Or decide on a method to select the id
+                const icon = getWeatherIcon(iconId);
+
                 return {
                     date: dayData.date,
                     min,
                     max,
                     description: desc,
                     wind,
+                    humidity,
+                    icon,
                 };
             });
 
             setDailyForecast(dailyArr);
         };
+
         fetchData();
     }, [apiKey, coords]);
 
@@ -186,18 +219,15 @@ export default function WeatherWidget(): JSX.Element {
             </div>
 
             {/* Weather */}
-            <div className="flex flex-row gap-overlay">
+            <div className="flex flex-col sm:flex-row gap-overlay">
                 {/* Today Detail */}
                 <div className="flex flex-col items-start justify-end gap-default">
-                    {/* Conditions icon */}
-
-                    {/* TODO: Replace with photo from api */}
-                    {/* <div className="text-sm opacity-80">{conditions}</div> */}
-                    <div className="text-7xl">⛅</div>
+                    {/* Conditions */}
+                    <div className="text-9xl">{getWeatherIcon(currentWeather.weather[0].id)}</div>
 
                     <div className="text-9xl font-bold ">
-                        51°F
-                        {/* {currentTemp} */}
+                        {/* 51°F */}
+                        {currentTemp}
                     </div>
 
                     <div className="flex text-medium font-semibold opacity-80 gap-default text-white/90">
@@ -243,6 +273,7 @@ export default function WeatherWidget(): JSX.Element {
                             const hum = day.humidity + "%";
                             const w = day.wind + " m/s";
 
+
                             return (
                                 <tr
                                     key={i}
@@ -259,22 +290,31 @@ export default function WeatherWidget(): JSX.Element {
                                     </td>
                                     <td className="p-2 align-middle font-semibold capitalize">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-4xl">☁️</span>
+                                            <span className="text-4xl">
+                                                {day.icon}
+                                            </span>
                                             {day.description}
                                         </div>
                                     </td>
-                                    <td className="p-2 align-middle flex flex-col items-start   font-semibold uppercase text-center">
-                                        <span className="text-xl text-white">
-                                            {hi}
-                                        </span>
-                                        <span className="opacity-80 text-xs">
-                                            {lo}
-                                        </span>
+                                    <td className="p-2 align-middle font-semibold uppercase text-center">
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-xl text-white">
+                                                {hi}
+                                            </span>
+                                            <span className="opacity-80 text-xs">
+                                                {lo}
+                                            </span>
+                                        </div>
                                     </td>
-                                    <td className="p-2 align-middle items-start font-semibold text-center">
-                                        <span className="text-xl text-white">
-                                            {w}
-                                        </span>
+                                    <td className="p-2 align-middle font-semibold  text-center">
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-xl text-white">
+                                                {w}
+                                            </span>
+                                            <span className="opacity-80 text-xs">
+                                                {hum}
+                                            </span>
+                                        </div>
                                     </td>
                                 </tr>
                             );
