@@ -16,7 +16,6 @@ import {
     TableCell,
     Input,
     Button,
-    DateValue,
     DatePicker,
     Card,
     CardHeader,
@@ -58,7 +57,7 @@ export default function FoodPage() {
     const [newCategory, setNewCategory] = useState("");
     const [newQuantity, setNewQuantity] = useState<number | undefined>();
     const [newExpirationDate, setNewExpirationDate] = useState(
-        parseDate("2022-12-31")
+        parseDate("2024-04-04")
     );
     const [newStorageLocation, setNewStorageLocation] = useState("");
 
@@ -204,9 +203,7 @@ export default function FoodPage() {
                             <Hourglass className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
                         value={newExpirationDate}
-                        onChange={(date) =>
-                            setNewExpirationDate(date as DateValue)
-                        }
+                        onChange={(date) => date && setNewExpirationDate(date)}
                     />
                     <Input
                         label="Storage Location"
