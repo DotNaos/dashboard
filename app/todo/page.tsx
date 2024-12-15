@@ -1,8 +1,6 @@
 "use client";
 
 import { useSession, useSupabaseClient, Session } from '@supabase/auth-helpers-react';
-import { Auth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useEffect, useState } from 'react';
 
 interface Todo {
@@ -39,14 +37,6 @@ export default function TodoPage() {
     await fetchTodos();
 
   };
-
-  if (!session) {
-    return (
-      <div className="overlay">
-        <Auth appearance={{ theme: ThemeSupa }} providers={[]} supabaseClient={supabase} />
-      </div>
-    );
-  }
 
   return (
     <div>
