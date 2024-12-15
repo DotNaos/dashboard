@@ -10,7 +10,7 @@ export const siteConfig = {
             href: "/weather",
         },
         {
-            label: "Food Stock",
+            label: "Food Inventory",
             icon: "🍔",
             href: "/food",
         },
