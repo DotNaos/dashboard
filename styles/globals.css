@@ -21,4 +21,31 @@
     .weather-measurement {
         @apply flex items-center;
     }
+
+    .login-button {
+        @apply !bg-gradient-to-b from-dust to-90% to-dark !text-white font-semibold !rounded-default !border-2 !border-opacity-35;
+    }
+
+    .login-container {
+        @apply !bg-transparent;
+    }
+
+    .login-anchor {
+        @apply !text-default-500 !decoration-transparent;
+    }
+    .login-divider {
+        @apply !text-dust mx-default;
+    }
+    .login-label {
+        @apply !text-default-600;
+    }
+    .login-input {
+        @apply !bg-overlay !border-none !text-default-800 !rounded-xl;
+    }
+    .login-loader {
+        @apply !text-white;
+    }
+    .login-message {
+        @apply !text-dust;
+    }
 }
