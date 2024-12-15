@@ -22,6 +22,7 @@ export default function TodoPage() {
     }
   }, [session]);
 
+
   const fetchTodos = async (): Promise<void> => {
     const { data } = await supabase
       .from('todos')
@@ -36,6 +37,7 @@ export default function TodoPage() {
       .from('todos')
       .insert([{ user_id: session!.user.id, task: todo }]);
     await fetchTodos();
+
   };
 
   if (!session) {

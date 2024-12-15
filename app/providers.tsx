@@ -7,7 +7,6 @@ import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
-
 import { supabase } from '@/lib/supabaseClient';
 
 export interface ProvidersProps {
