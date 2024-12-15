@@ -6,7 +6,7 @@ import {
     useSupabaseClient,
     Session,
 } from "@supabase/auth-helpers-react";
-import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import { getLocalTimeZone, today } from "@internationalized/date";
 import {
     Table,
     TableHeader,
@@ -21,8 +21,16 @@ import {
     CardBody,
     CardFooter,
     DateInput,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    useDisclosure,
 } from "@nextui-org/react";
 import {
+    ArrowUpRight,
+    DiamondPlus,
     HandCoins,
     Hourglass,
     MapPin,
@@ -59,6 +67,7 @@ export default function FoodPage() {
     const [newExpirationDate, setNewExpirationDate] = useState(
         today(getLocalTimeZone())
     );
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [newStorageLocation, setNewStorageLocation] = useState("");
 
     useEffect(() => {
@@ -80,7 +89,9 @@ export default function FoodPage() {
                 "Item Name": newItemName,
                 Category: newCategory,
                 Quantity: newQuantity,
-                "Expiration Date": newExpirationDate.toDate(getLocalTimeZone()).toLocaleDateString("de-DE"),
+                "Expiration Date": newExpirationDate
+                    .toDate(getLocalTimeZone())
+                    .toLocaleDateString("de-DE"),
                 "Storage Location": newStorageLocation,
             },
         ]);
@@ -104,6 +115,7 @@ export default function FoodPage() {
                 <Button
                     isIconOnly
                     color="danger"
+                    variant="light"
                     onPress={() => deleteFood(food.id)}
                 >
                     <Trash2 />
@@ -165,69 +177,123 @@ export default function FoodPage() {
                 </CardBody>
 
                 <CardFooter>
-                    <div className="flex flex-wrap gap-4 mt-6">
-                        <Input
-                            label="Food Name"
-                            labelPlacement="outside"
-                            placeholder="e.g. Apple"
-                            startContent={
-                                <Tag className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            value={newItemName}
-                            onChange={(e) => setNewItemName(e.target.value)}
-                        />
-                        <Input
-                            label="Category"
-                            labelPlacement="outside"
-                            placeholder="e.g. Fruits"
-                            startContent={
-                                <Shapes className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            value={newCategory}
-                            onChange={(e) => setNewCategory(e.target.value)}
-                        />
-                        <Input
-                            label="Quantity"
-                            labelPlacement="outside"
-                            placeholder="e.g. 5"
-                            startContent={
-                                <HandCoins className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            type="number"
-                            value={newQuantity?.toString() ?? ""}
-                            onChange={(e) =>
-                                setNewQuantity(Number(e.target.value))
-                            }
-                        />
-                        <DateInput
-                            defaultValue={today(getLocalTimeZone())}
-                            label="Expiration Date"
-                            labelPlacement="outside"
-                            minValue={today(getLocalTimeZone())}
-                            startContent={
-                                <Hourglass className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            value={newExpirationDate}
-                            onChange={(date) =>
-                                date && setNewExpirationDate(date)
-                            }
-                        />
-                        <Input
-                            label="Storage Location"
-                            labelPlacement="outside"
-                            placeholder="e.g. Fridge"
-                            startContent={
-                                <MapPin className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            value={newStorageLocation}
-                            onChange={(e) =>
-                                setNewStorageLocation(e.target.value)
-                            }
-                        />
-                        <Button color="primary" onPress={addFood}>
-                            Add Food
-                        </Button>
-                    </div>
+                    <Button
+                        color="success"
+                        endContent={<DiamondPlus />}
+                        onPress={onOpen}
+                    >
+                        Add Food
+                    </Button>
+
+                    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                        <ModalContent>
+                            {(onClose) => (
+                                <>
+                                    <ModalHeader className="flex flex-col gap-1">
+                                        New Food Item
+                                    </ModalHeader>
+                                    <ModalBody className="flex flex-wrap gap-4">
+                                        <Input
+                                            label="Food Name"
+                                            labelPlacement="outside"
+                                            placeholder="e.g. Apple"
+                                            startContent={
+                                                <Tag className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            value={newItemName}
+                                            onChange={(e) =>
+                                                setNewItemName(e.target.value)
+                                            }
+                                        />
+                                        <Input
+                                            label="Category"
+                                            labelPlacement="outside"
+                                            placeholder="e.g. Fruits"
+                                            startContent={
+                                                <Shapes className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            value={newCategory}
+                                            onChange={(e) =>
+                                                setNewCategory(e.target.value)
+                                            }
+                                        />
+                                        <Input
+                                            label="Quantity"
+                                            labelPlacement="outside"
+                                            placeholder="e.g. 5"
+                                            startContent={
+                                                <HandCoins className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            type="number"
+                                            value={
+                                                newQuantity?.toString() ?? ""
+                                            }
+                                            onChange={(e) =>
+                                                setNewQuantity(
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                        />
+                                        <DateInput
+                                            defaultValue={today(
+                                                getLocalTimeZone()
+                                            )}
+                                            label="Expiration Date"
+                                            labelPlacement="outside"
+                                            minValue={today(getLocalTimeZone())}
+                                            startContent={
+                                                <Hourglass className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            value={newExpirationDate}
+                                            onChange={(date) =>
+                                                date &&
+                                                setNewExpirationDate(date)
+                                            }
+                                        />
+                                        <Input
+                                            label="Storage Location"
+                                            labelPlacement="outside"
+                                            placeholder="e.g. Fridge"
+                                            startContent={
+                                                <MapPin className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            value={newStorageLocation}
+                                            onChange={(e) =>
+                                                setNewStorageLocation(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button
+                                            color="danger"
+                                            variant="light"
+                                            onPress={onClose}
+                                        >
+                                            cancel
+                                        </Button>
+
+                                        <Button
+                                            className="font-semibold"
+                                            color="primary"
+                                            endContent={
+                                                <ArrowUpRight className="text-2xl text-primary-400 pointer-events-none flex-shrink-0" />
+                                            }
+                                            type="submit"
+                                            variant="bordered"
+                                            onPress={() => {
+                                                addFood();
+                                                onClose();
+                                            }}
+                                        >
+                                            Add
+                                        </Button>
+                                    </ModalFooter>
+                                </>
+                            )}
+                        </ModalContent>
+                    </Modal>
                 </CardFooter>
             </Card>
         </div>

@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     return (
         <Card className="w-full max-w-screen-sm">
-            <CardHeader className="text-3xl font-bold">Login</CardHeader>
+            <CardHeader className="header">Login</CardHeader>
             <CardBody className="min-w-max w-[640px]">
                 <Auth
                     appearance={{
