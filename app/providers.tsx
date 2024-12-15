@@ -6,6 +6,8 @@ import * as React from "react";
 import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { supabase } from '@/lib/supabaseClient';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -25,7 +27,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+      <NextThemesProvider {...themeProps}>
+        <SessionContextProvider supabaseClient={supabase}>
+          {children}
+        </SessionContextProvider>
+      </NextThemesProvider>
     </NextUIProvider>
   );
 }
