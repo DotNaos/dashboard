@@ -136,9 +136,6 @@ export default function FoodPage() {
                         <span className="font-semibold text-default-900">
                             {cellValue}
                         </span>
-                        <span className="text-sm text-default-500">
-                            {food.Category}
-                        </span>
                     </div>
                 </div>
             );
