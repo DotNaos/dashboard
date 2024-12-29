@@ -1,0 +1,47 @@
+% !TEX encoding = UTF-8 Unicode
+% !!!  THIS FILE IS UTF-8 !!!
+% !!!  MAKE SURE YOUR LaTeX Editor IS CONFIGURED TO USE UTF-8 !!!
+
+% Computational and Data Science Course Paper LaTeX Template
+% University of Applied Sciences of the Grisons
+% ---------------------------------------------------------------
+% Author: Corsin Capol corsin.capol@fhgr.ch
+% ---------------------------------------------------------------
+
+%-------------------------
+% header
+% ------------------------
+\documentclass[a4paper,12pt]{scrartcl}
+\linespread {1.25}
+
+%-------------------------
+% packages and config
+% ------------------------
+\input{packages_and_configuration}
+
+%-------------------------
+% document begin
+%-------------------------
+\begin{document}
+
+%-------------------------
+% title
+%-------------------------
+\input{title}
+
+% New page after title and abstract
+\newpage
+
+\begin{multicols}{2}
+\input{methodology}
+\input{results}
+\input{discussion}
+\input{conclusion}
+\end{multicols}
+
+%-------------------------
+% literature
+%-------------------------
+\bibliography{CDS205}
+
+\end{document}
