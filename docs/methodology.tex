@@ -4,61 +4,43 @@
 
 \section{Methodology}\label{sec:Methodology}
 \subsection{Frontend}
-Using a website as UI implementation has the benefits of being easy and fast to develop, accessible from nearly any device and wide support for backend technologies. The frontend uses the following tech-stack:
-\begin{itemize}
-    \item \textbf{React} as the frontend framework.
-    \item \textbf{NextJS} for server-side rendering and routing.
-    \item \textbf{TailwindCSS} for faster and more consistent styling.
-    \item \textbf{NextUI} as component library.
-\end{itemize}
+Using a website as the user interface offers the advantages of quick and efficient development, broad accessibility across devices, and extensive support for backend technologies. The frontend is built using a tech stack comprising React as the core framework, NextJS for server-side rendering and routing, TailwindCSS for consistent and efficient styling, and NextUI as the component library.
 
-The Website features 3 main pages:
-\begin{itemize}
-    \item \textbf{Weather} - A quick weather forecast for today and the next days.
-    \item \textbf{Food Stock} - A list of food items labeled with their expiration date and storage location.
-    \item \textbf{Todos} - Just a simple todo list for tasks of today.
-\end{itemize}
+The website is organized into three main pages: the Weather page provides a quick forecast for the current and upcoming days, the Food Stock page displays a categorized list of food items with their expiration dates and storage locations, and the Todos page presents a simple to-do list for daily tasks (Figure~\ref{fig:website}).
 
 \begin{figure}[H]
-    \includegraphics[width=0.475\textwidth]{media/weather.png}
-    \includegraphics[width=0.475\textwidth]{media/food.png}
-    \includegraphics[width=0.475\textwidth]{media/todo.png}
-    \caption{Website Pages}
-    \label{fig:website}
+\includegraphics[width=0.475\textwidth]{media/weather.png}
+\includegraphics[width=0.475\textwidth]{media/food.png}
+\includegraphics[width=0.475\textwidth]{media/todo.png}
+\caption{Website Pages}
+\label{fig:website}
 \end{figure}
 
-But before the user can access the website, they need to authenticate themselves. This is done by a simple login page, where a new user can register with email and password or a google login. After the user is authenticated, they are redirected to the main page and have data associated with their account.
+Before accessing the main features, users must authenticate via a login page that supports both email and password registration as well as Google login. Upon successful authentication, users are directed to the main dashboard, where their personalized data is displayed (Figure~\ref{fig:login}).
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.475\textwidth]{media/login.png}
-    \caption{Login Screen}
-    \label{fig:login}
+\centering
+\includegraphics[width=0.475\textwidth]{media/login.png}
+\caption{Login Screen}
+\label{fig:login}
 \end{figure}
 
 \subsection{External APIs}
-The website also features always changing background images, which are fetched from the Unsplash API. The images are fetched on the server-side and are cached for 1 hour. This way, the website always has a fresh look and feel. The free API has a limit of 50 requests per hour, which is more than enough for this project.
-
-As for the weather forecast, the data is fetched from the OpenWeatherMap API. The API provides a simple and easy to use interface for the current weather and 5-day weather forecast with a bunch of extra sensor data, like humidity, pressure etc. available in the free tier.
+Dynamic background images are retrieved from the Unsplash API and cached on the server side for one hour to maintain a fresh appearance without exceeding the free-tier limit of 50 requests per hour. Weather data, including the current conditions and a 5-day forecast, is sourced from the OpenWeatherMap API. This API offers a user-friendly interface for retrieving essential weather metrics such as temperature, humidity, and atmospheric pressure.
 
 \subsection{Backend}
-The website is hosted on vercel under the url: \url{https://cds-dashboard.vercel.app/}.
-Vercel provides an easy way to deploy NextJS applications, which are stored on a GitHub repository. The website is automatically deployed on every push to the main branch, which makes it ideal for a small project like this to get started quickly.
+The website is hosted on Vercel at \url{https://cds-dashboard.vercel.app/}, which provides seamless deployment of NextJS applications stored in a GitHub repository. The application is automatically deployed upon each push to the main branch, making it a convenient solution for managing project updates.
 
-To store the user data, i.e. the food items and todos, a Supabase database is used. Supabase is an open-source Firebase alternative, which can also be self-hosted. There are other alternative for self-hosted databases, like MongoDB, or a simple SQL database, but Supabase comes with a lot of features out of the box, like authentication and a good API, reducing unecessary overhead.
+User data, such as food inventory and to-dos, is stored in a Supabase database. Supabase, an open-source alternative to Firebase, supports both cloud and self-hosted deployments. While alternatives like MongoDB or traditional SQL databases exist, Supabase offers built-in authentication and API features that reduce setup complexity.
 
-To self-host the database, one must pull the docker image from the supabase github repository and run it.
-Because Docker is creating a encapsulated environment, the database can be deployed to any machine running Docker, including a Raspberry Pi.
-A Web Interface is provided by supabase, through which the database can be managed.
-By importing a schema from a csv file, the schema is created automatically and can be adjusted to use authentication.
+For local deployment, the Supabase Docker image can be pulled and run on any Docker-compatible device, such as a Raspberry Pi. Supabase provides a web interface for database management, and schemas can be imported and configured automatically via CSV files (Figure~\ref{fig:schema}).
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.475\textwidth]{media/database.png}
-    \caption{Database Schema}
-    \label{fig:schema}
+\centering
+\includegraphics[width=0.475\textwidth]{media/database.png}
+\caption{Database Schema}
+\label{fig:schema}
 \end{figure}
 
 \subsection{Tunneling}
-The only problem is that the Raspberry PI is only accessible from the local network. A solution to this would be to use port forwarding, but this requires a static IP address, a lot of configuration and is not very secure for a home network. A better solution is to use a tunneling service like ngrok. Ngrok creates a secure tunnel to the Raspberry PI, which can be accessed from anywhere in the world.
-To implement this, it is as easy as to install the ngrok package on the Raspberry PI, login to your account and run the command \texttt{ngrok http 3000}. Only the Supabase URL in the Google Cloud and frontend configuration need to be replaced with the ngrok URL, following this change.
+Since the Raspberry Pi is only accessible within the local network, port forwarding could be used, though it requires a static IP address, extensive configuration, and presents security risks. A more secure solution is to use a tunneling service like ngrok, which establishes a secure external tunnel to the Raspberry Pi. Implementing ngrok involves installing the package on the Raspberry Pi, logging into an ngrok account, and running the command \texttt{ngrok http 3000}. The frontend and Google Cloud configuration URLs need to be updated to reflect the ngrok-provided URL to enable remote access.
