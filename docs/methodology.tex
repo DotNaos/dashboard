@@ -43,4 +43,8 @@ For local deployment, the Supabase Docker image can be pulled and run on any Doc
 \end{figure}
 
 \subsection{Tunneling}
-Since the Raspberry Pi is only accessible within the local network, port forwarding could be used, though it requires a static IP address, extensive configuration, and presents security risks. A more secure solution is to use a tunneling service like ngrok, which establishes a secure external tunnel to the Raspberry Pi. Implementing ngrok involves installing the package on the Raspberry Pi, logging into an ngrok account, and running the command \texttt{ngrok http 3000}. The frontend and Google Cloud configuration URLs need to be updated to reflect the ngrok-provided URL to enable remote access.
+Since the Raspberry Pi is only accessible within the local network, port forwarding could be used, though it requires a static IP address, extensive configuration, and presents security risks
+~\cite{wang_port_2024}
+. A more secure solution is to use a tunneling service like ngrok, which establishes a secure external tunnel to the Raspberry Pi
+~\cite{ngrok_documentation}
+. Implementing ngrok involves installing the package on the Raspberry Pi, logging into an ngrok account, and running the command \texttt{ngrok http 3000}. The frontend and Google Cloud configuration URLs need to be updated to reflect the ngrok-provided URL to enable remote access.
