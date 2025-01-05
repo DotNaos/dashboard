@@ -48,3 +48,5 @@ next-env.d.ts
 *.gz
 
 **.idea/
+
+!Daily_Dashboard_paper.pdf
